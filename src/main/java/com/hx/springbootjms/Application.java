@@ -22,20 +22,29 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 
 		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-        JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+        Sender sender = context.getBean(Sender.class);
 
-        jmsTemplate.convertAndSend("order-queue", "Hello!");
+        sender.sendMessage("order-queue", "Hello!");
 
 	}
 
+//    @Bean
+//    public JmsListenerContainerFactory warehouseFactory(ConnectionFactory factory,
+//                                                        DefaultJmsListenerContainerFactoryConfigurer configurer) {
+//        DefaultJmsListenerContainerFactory containerFactory = new DefaultJmsListenerContainerFactory();
+//        configurer.configure(containerFactory, factory);
+//        return containerFactory;
+//    }
+
     @Bean
-    public JmsListenerContainerFactory warehouseFactory(ConnectionFactory factory,
-                                                        DefaultJmsListenerContainerFactoryConfigurer configurer) {
-        DefaultJmsListenerContainerFactory containerFactory = new DefaultJmsListenerContainerFactory();
-        configurer.configure(containerFactory, factory);
-        return containerFactory;
+    public ActiveMQConnectionFactory connectionFactory(){
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("admin",
+                "admin","tcp://localhost:61616");
+        return factory;
     }
 
-
-
+    @Bean
+    public JmsTemplate jmsTemplate() {
+        return new JmsTemplate(connectionFactory());
+    }
 }
