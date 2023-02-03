@@ -28,6 +28,14 @@ public class Application {
 
 	}
 
+//    @Bean
+//    public JmsListenerContainerFactory warehouseFactory(ConnectionFactory factory,
+//                                                        DefaultJmsListenerContainerFactoryConfigurer configurer) {
+//        DefaultJmsListenerContainerFactory containerFactory = new DefaultJmsListenerContainerFactory();
+//        configurer.configure(containerFactory, factory);
+//        return containerFactory;
+//    }
+
     @Bean
     public ActiveMQConnectionFactory connectionFactory(){
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("admin",
